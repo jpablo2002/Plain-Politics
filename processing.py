@@ -22,8 +22,7 @@ response = requests.get(f"https://api.govinfo.gov/published/{from_date}/{to_date
 bills = response.json()["packages"]
 
 bill_list = []
-
-
+#List of Bill Objects
 
 for bill in bills:
 	bill_committees = []
