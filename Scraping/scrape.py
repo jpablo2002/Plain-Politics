@@ -53,7 +53,7 @@ for bill in bill_list:
 
         short_title = bill.get("shortTitle")
         short_title = short_title[0].get("title") if short_title is not None else bill.get('title')
-        sql = "INSERT INTO BILLCOMMITIES (`bill_id`, `title`, `summary_link`, `bill_link`) VALUES (%s, %s, %s, %s)"
+        sql = "INSERT INTO BILLCOMMITIES (`bill_id`, `title`, `text_link`, `bill_link`) VALUES (%s, %s, %s, %s)"
         val = (bill.get("billNumber"), short_title, bill.get("download").get("txtLink"), bill.get("detailsLink"))
         mycursor.execute(sql, val)
         mydb.commit()
