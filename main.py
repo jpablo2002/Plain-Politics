@@ -26,7 +26,7 @@ def hello_world(request):
     search = request.args.get("search")
 
     cursor = mydb.cursor()
-    sql = 'SELECT * FROM mydb WHERE title = %s'
+    sql = 'SELECT * FROM mydb WHERE title= %s'
     args = ['%' + search + '%']
     cursor.execute(sql, args)
     mydb.commit()
