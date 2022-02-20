@@ -1,8 +1,8 @@
 import mysql.connector
 import datetime
-from pprint import pprint
 import requests
-import json
+from bs4 import BeautifulSoup
+
 
 mydb = mysql.connector.connect(
     host="34.139.89.202",
@@ -41,7 +41,10 @@ for package in packages:
     link = package["packageLink"]
     info = requests.get(f"{link}?api_key={api_key}")
     dic = info.json()
-    text = dic["download"]["txtLink"]
+    text_link = dic["download"]["txtLink"]
+    text_content = requests.get(f"{text_link}?api_key={api_key}").content
+    soup = BeautifulSoup(text_content, 'html.parser')
+    text = soup.pre.contents
     bill_list.append(Bill(dic["title"], text, dic["detailsLink"], dic["packageId"]))
 
 for bill in bill_list:
