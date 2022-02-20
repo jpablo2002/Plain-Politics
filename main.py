@@ -26,7 +26,12 @@ def hello_world(request):
     search = request.args.get("search")
 
     cursor = mydb.cursor()
-    sql = 'SELECT * FROM mydb WHERE title= %s'
-    args = ['%' + search + '%']
-    cursor.execute(sql, args)
-    mydb.commit()
+    sql2 = "SELECT * FROM BILLCOMMITIES JOIN categories ON BILLCOMMITIES.id = categories.id WHERE " \
+           "categories.categories = %s "
+    val = (search,)
+    cursor.execute(sql2, val)
+
+    for row in cursor:
+        print(row)
+
+    return ''
