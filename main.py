@@ -1,4 +1,5 @@
 import functions_framework
+import mysql.connector
 import requests
 import json
 from pprint import pformat
@@ -10,6 +11,7 @@ mydb = mysql.connector.connect(
     password="AH+PS@SN*rZ]%GAp^LXU>TH7aw{bQ/f3",
     database="plain-politics"
 )
+
 
 @functions_framework.http
 def hello_world(request):
@@ -23,4 +25,8 @@ def hello_world(request):
     """
     search = request.args.get("search")
 
-    sql = "WHERE title LIKE "
+    cursor = mydb.cursor()
+    sql = 'SELECT * FROM mydb WHERE title = %s'
+    args = ['%' + search + '%']
+    cursor.execute(sql, args)
+    mydb.commit()
