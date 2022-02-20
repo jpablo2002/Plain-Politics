@@ -15,8 +15,6 @@ mycursor = mydb.cursor()
 
 mycursor.execute("SHOW DATABASES")
 
-print(mycursor)
-
 api_key = "nZioH35K5X3dPlPZCBjKhACC9CPU5ChXNvIXMCMh"
 
 def formatDate(date: datetime.datetime) -> str:
@@ -27,10 +25,11 @@ class Bill():
     summary: str
     committee: list
     link: str
-    def __init__(self, summary: str, committee: list, link: str) -> None:
+    def __init__(self, summary: str, committee: list, link: str, id: str) -> None:
         self.summary = summary
         self.text = committee
         self.link = link
+        self.id = id
 
 to_date = formatDate(datetime.datetime.now())
 from_date = formatDate(datetime.datetime.now() - datetime.timedelta(days=1))
@@ -43,8 +42,19 @@ bill_list = []
 #List of Bill Objects
 
 for package in packages:
-    texts = []
     link = package["packageLink"]
     info = requests.get(f"{link}?api_key={api_key}")
-    texts.append(info.json()["download"]["xmlLink"])
-    bill_list.append(Bill(info.json()["title"], texts, info.json()["detailsLink"]))
+    dic = info.json()
+    text = dic["download"]["txtLink"]
+    bill_list.append(Bill(dic["title"], text, dic["detailsLink"], dic["packageId"]))
+
+for bill in bill_list:
+    mycursor = mydb.cursor()
+
+    sql = "INSERT INTO BILLCOMMITIES (billId, title, summary, ) VALUES (%s, %s)"
+    val = ("John", "Highway 21")
+    mycursor.execute(sql, val)
+
+    mydb.commit()
+
+    print(mycursor.rowcount, "record inserted.")
