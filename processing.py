@@ -36,4 +36,3 @@ for package in packages:
 		bill_committees.append(committee["committeeName"])
 	bill_list.append(Bill(info.json()["title"], bill_committees, info.json()["detailsLink"]))
 
-print(bill_list[0].link)
