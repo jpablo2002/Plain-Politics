@@ -13,10 +13,12 @@ class Bill():
 	summary: str
 	committee: list
 	link: str
-	def __init__(self, summary: str, committee: list, link: str) -> None:
+	number: int
+	def __init__(self, summary: str, committee: list, link: str, bill_number) -> None:
 		self.summary = summary
 		self.committee = committee
 		self.link = link
+		self.number = bill_number
 
 to_date = formatDate(datetime.datetime.now())
 from_date = formatDate(datetime.datetime.now() - datetime.timedelta(days=1))
@@ -34,6 +36,6 @@ for package in packages:
 	info = requests.get(f"{link}?api_key={api_key}")
 	for committee in info.json()["committees"]:
 		bill_committees.append(committee["committeeName"])
-	bill_list.append(Bill(info.json()["title"], bill_committees, info.json()["detailsLink"]))
+	bill_list.append(Bill(info.json()["title"], bill_committees, info.json()["detailsLink"], info.json()["billNumber"]))
 
-print(bill_list[0].link)
+print(bill_list[0].number)
