@@ -1,5 +1,6 @@
 import functions_framework
 import mysql.connector
+from flask import jsonify
 import requests
 import json
 from pprint import pformat
@@ -26,12 +27,16 @@ def hello_world(request):
     search = request.args.get("search")
 
     cursor = mydb.cursor()
-    sql2 = "SELECT * FROM BILLCOMMITIES JOIN categories ON BILLCOMMITIES.id = categories.id WHERE " \
+    sql2 = "SELECT bill_id, title, bill_link, blob_link FROM BILLCOMMITIES JOIN categories ON BILLCOMMITIES.id = categories.id WHERE " \
            "categories.categories = %s "
     val = (search,)
     cursor.execute(sql2, val)
 
+    columns = ["bill_id", "title", "text_link", "blob_link"]
+    result = []
     for row in cursor:
-        print(row)
-
-    return ''
+        drow = {}
+        for i in range(len(columns)):
+            drow[columns[i]] = row[i]
+        result.append(drow)
+    return jsonify(result)
